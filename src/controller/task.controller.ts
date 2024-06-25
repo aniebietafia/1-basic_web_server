@@ -25,9 +25,10 @@ class TaskController {
 
     try {
       axios.get(geoLocationUrl).then((response) => {
+        const location = response.data;
         res.status(StatusCodes.OK).json({
           ip: `You're requesting for this resource from IP address: ${clientIp}`,
-          geoLocation: response.data,
+          geoLocation: location,
         });
       });
     } catch (error) {

@@ -28,7 +28,13 @@ class TaskController {
         const location = response.data;
         res.status(StatusCodes.OK).json({
           ip: `You're requesting for this resource from IP address: ${clientIp}`,
-          geoLocation: location,
+          geoLocation: {
+            ip: location.ip,
+            city: location.city,
+            region: location.region,
+            country: location.country,
+            timezone: location.timezone,
+          },
         });
       });
     } catch (error) {

@@ -5,7 +5,7 @@ dotenv.config();
 import app from "./app";
 
 // set port
-const PORT: string | number = process.env["PORT"] || 3001;
+const PORT: string | number = process.env["PORT"] || 8080;
 
 app.set("port", PORT);
 

@@ -4,10 +4,13 @@ import morgan from "morgan";
 import cors from "cors";
 import { StatusCodes } from "http-status-codes";
 
+import routes from "./routes/index.route";
+
 // instanciate express app
 const app: express.Application = express();
 
 // define a route
+app.use("/", routes);
 
 // setup middlewares
 app.use(cors());

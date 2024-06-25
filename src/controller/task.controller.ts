@@ -1,5 +1,6 @@
 import { Request, Response } from "express";
 import { StatusCodes } from "http-status-codes";
+import axios from "axios";
 
 /**
  * @description controller to log the ip address of the client
@@ -14,14 +15,28 @@ import { StatusCodes } from "http-status-codes";
  */
 
 class TaskController {
+  private clientIp: string | string[];
+  private geoLocationUrl: string;
+
+  constructor() {
+    this.clientIp = "";
+    this.geoLocationUrl = `https://ipinfo.io/${this.clientIp}/geo`;
+  }
+
   public logIpAddress(req: Request, res: Response): void {
-    const clientIp =
+    this.clientIp =
       req.headers["x-forwarded-for"] ||
       req.socket.remoteAddress ||
       "Unknown IP";
-    res.status(StatusCodes.OK).json({
-      ip: `You're requesting for this resource from IP address: ${clientIp}`,
-    });
+
+    try {
+      axios.get(this.geoLocationUrl).then((response) => {
+        res.status(StatusCodes.OK).json({
+          ip: `You're requesting for this resource from IP address: ${this.clientIp}`,
+          geoLocation: response.data,
+        });
+      });
+    } catch (error) {}
   }
 }
 

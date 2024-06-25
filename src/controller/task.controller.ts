@@ -15,28 +15,26 @@ import axios from "axios";
  */
 
 class TaskController {
-  private clientIp: string | string[];
-  private geoLocationUrl: string;
-
-  constructor() {
-    this.clientIp = "";
-    this.geoLocationUrl = `https://ipinfo.io/${this.clientIp}/geo`;
-  }
-
   public logIpAddress(req: Request, res: Response): void {
-    this.clientIp =
+    const clientIp =
       req.headers["x-forwarded-for"] ||
       req.socket.remoteAddress ||
       "Unknown IP";
 
+    const geoLocationUrl = `https://ipinfo.io/${clientIp}/geo`;
+
     try {
-      axios.get(this.geoLocationUrl).then((response) => {
+      axios.get(geoLocationUrl).then((response) => {
         res.status(StatusCodes.OK).json({
-          ip: `You're requesting for this resource from IP address: ${this.clientIp}`,
+          ip: `You're requesting for this resource from IP address: ${clientIp}`,
           geoLocation: response.data,
         });
       });
-    } catch (error) {}
+    } catch (error) {
+      res.status(StatusCodes.INTERNAL_SERVER_ERROR).json({
+        error: "An error occurred while fetching the IP address",
+      });
+    }
   }
 }
 

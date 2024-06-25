@@ -34,6 +34,8 @@ class TaskController {
             region: location.region,
             country: location.country,
             timezone: location.timezone,
+            long: location.loc.split(",")[0],
+            lat: location.loc.split(",")[1],
           },
         });
       });
